@@ -2,6 +2,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+// const WebpackBar = require('webpackbar');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const webpack = require('webpack')
 
 const resolve = (dir) => path.resolve(__dirname, dir)
@@ -11,16 +15,18 @@ module.exports = function (env) {
   const isDevelopment = env ==='development'
   const baseConfig = {
     mode: env,
-    stats: 'errors-only',
+    // stats: 'errors-only',  // webpack-cli中 const statsPresetToOptions = require("webpack").Stats.presetToOptions;
+    context: __dirname,
+    devtool: 'source-map',
     // 入口文件
     entry: './src/index.tsx',
     // 输出文件名称
     output: {
-      filename: '[name][chunkHash].js',
+      filename: '[name].js',
       path: resolve('./dist'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         src: resolve('./src'),
         utils: resolve('./src/utils')
@@ -41,23 +47,30 @@ module.exports = function (env) {
           use: 'babel-loader',
           exclude: /node_modules/,
         },
+        {
+          test: /\.(css|less)?$/,
+          use: [
+            // MiniCssExtractPlugin.loader,
+            'style-loader',
+            'css-loader',
+            'less-loader'
+          ],
+        },
       ]
     },
     plugins: [
-      new CleanWebpackPlugin(),
+      // new WebpackBar(),
+      // new ProgressBarPlugin(),
       new HtmlWebpackPlugin({
         template: resolve('./public/index.html'),
         title: 'RTS脚手架' // React + Typescript
       }),
-      // FIX: webpack5 process is undefined
-      new webpack.DefinePlugin({
-        "process.platform": JSON.stringify(process.platform),
-        "process.env.TERM": JSON.stringify(process.env.TERM),
-        "process.env.WDS_SOCKET_HOST": JSON.stringify(process.env.WDS_SOCKET_HOST),
-        "process.env.WDS_SOCKET_PORT": JSON.stringify(process.env.WDS_SOCKET_HOST),
-        "process.env.WDS_SOCKET_PATH": JSON.stringify(process.env.WDS_SOCKET_PATH)
-    })
-    ]
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // new MiniCssExtractPlugin({
+      //   filename: '[name].css',
+      //   chunkFilename: '[name].chunk.css',
+      // })
+    ],
   }
 
   if (isDevelopment) {
@@ -71,7 +84,12 @@ module.exports = function (env) {
     baseConfig.plugins.push(
       new FriendlyErrorsWebpackPlugin(),
     )
+  } else {
+    baseConfig.plugins.push(
+      new CleanWebpackPlugin(),
+    )
   }
+
 
   return baseConfig
 }
