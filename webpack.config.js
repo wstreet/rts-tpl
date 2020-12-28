@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-// const WebpackBar = require('webpackbar');
+const WebpackBar = require('webpackbar');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const webpack = require('webpack')
 
@@ -17,7 +17,7 @@ module.exports = function (env) {
     mode: env,
     // stats: 'errors-only',  // webpack-cli中 const statsPresetToOptions = require("webpack").Stats.presetToOptions;
     context: __dirname,
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     // 入口文件
     entry: './src/index.tsx',
     // 输出文件名称
@@ -59,7 +59,7 @@ module.exports = function (env) {
       ]
     },
     plugins: [
-      // new WebpackBar(),
+      new WebpackBar(),
       // new ProgressBarPlugin(),
       new HtmlWebpackPlugin({
         template: resolve('./public/index.html'),
