@@ -1,10 +1,11 @@
 module.exports = api => {
   api.cache(true);
   return {
-    // plugins: [
-    //   "@babel/plugin-proposal-nullish-coalescing-operator",
-    //   "@babel/plugin-proposal-optional-chaining"
-    // ],
+    plugins: [
+      // "@babel/plugin-proposal-nullish-coalescing-operator",
+      // "@babel/plugin-proposal-optional-chaining"
+      "@babel/plugin-proposal-optional-chaining"
+    ],
     presets: [
       [
         "@babel/env",
@@ -20,7 +21,8 @@ module.exports = api => {
           }
         }
       ],
-      "@babel/react"
+      "@babel/react",
+      "@babel/preset-typescript"
     ]
   }
 }
