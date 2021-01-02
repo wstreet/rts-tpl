@@ -27,8 +27,9 @@ module.exports = function (env) {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         src: resolve('./src'),
+        components: resolve('./src/components'),
         pages: resolve('./src/pages'),
-        utils: resolve('./src/utils')
+        utils: resolve('./src/utils'),
       }
     },
     module: {
