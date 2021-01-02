@@ -1,28 +1,16 @@
-import React,  { useEffect, useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.less'
+import App from 'pages/home'
 
-const App = () => {
-  const [num, setNum] = useState(0)
-  useEffect(() => {
-    document.title = 'HAHA' + num
-  }, [num])
-  return <div>
-    app
-    <button onClick={() => setNum(num + 1)}>{num}</button> 
-  </div> 
-}
-
-class Bpp extends React.Component {
-  render() {
-    return <div>
-      Bpp
-      <App />
-    </div>
-  }
-}
-
-ReactDOM.render(
-  <Bpp />,
+const render = () => ReactDOM.render(
+  <App />,
   document.getElementById('root')
 )
+
+render()
+
+if (module.hot) {
+  module.hot.accept(() => {
+    render()
+  });
+}

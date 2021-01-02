@@ -2,8 +2,13 @@ module.exports = api => {
   api.cache(true);
   return {
     plugins: [
-      // "@babel/plugin-proposal-nullish-coalescing-operator",
-      // "@babel/plugin-proposal-optional-chaining"
+      ['import', 
+        { 
+          libraryName: 'antd', 
+          libraryDirectory: 'lib', 
+          style: 'css' 
+        }
+      ],
       "@babel/plugin-proposal-optional-chaining"
     ],
     presets: [

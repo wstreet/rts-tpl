@@ -4,8 +4,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const WebpackBar = require('webpackbar');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const webpack = require('webpack')
 
 const resolve = (dir) => path.resolve(__dirname, dir)
@@ -29,6 +27,7 @@ module.exports = function (env) {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         src: resolve('./src'),
+        pages: resolve('./src/pages'),
         utils: resolve('./src/utils')
       }
     },
@@ -59,16 +58,15 @@ module.exports = function (env) {
       ]
     },
     plugins: [
-      new WebpackBar(),
-      // new ProgressBarPlugin(),
       new HtmlWebpackPlugin({
         template: resolve('./public/index.html'),
         title: 'RTS脚手架' // React + Typescript
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // new webpack.ProgressPlugin(),
       // new MiniCssExtractPlugin({
-      //   filename: '[name].css',
-      //   chunkFilename: '[name].chunk.css',
+      //   filename: './dist/[name].css',
+      //   chunkFilename: './dist/[name].chunk.css',
       // })
     ],
   }
@@ -80,6 +78,7 @@ module.exports = function (env) {
       port: 9000,
       open: true,
       hot: true,
+      stats: 'errors-warnings',
     }
     baseConfig.plugins.push(
       new FriendlyErrorsWebpackPlugin(),
@@ -87,7 +86,11 @@ module.exports = function (env) {
   } else {
     baseConfig.plugins.push(
       new CleanWebpackPlugin(),
-    )
+    ),
+    baseConfig.optimization = {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
+    }
   }
 
 
