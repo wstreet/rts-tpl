@@ -1,0 +1,34 @@
+import React from 'react'
+
+export class <%= componentName %> extends React.Component<<%= componentName %>.Props, <%= componentName %>.State> {
+  render() {
+    const { prefixCls, children } = this.props
+
+  const baseCls = `${prefixCls}-<%= folderName %>`
+  
+  return (
+    <div className={baseCls}>
+      {
+        children
+      }
+     </div>
+    )
+  }
+}
+
+export namespace <%= componentName %> {
+
+  export interface Props {
+    prefixCls: string,
+    children: React.ReactNode
+  }
+
+  export interface State {
+
+  }
+
+  export const defaultProps: Props = {
+    prefixCls: 'rts',
+    children: '',
+  }
+}
